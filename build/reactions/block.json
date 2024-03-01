@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "maxgruson/reactions",
+  "version": "0.1.0",
+  "title": "Reacties",
+  "category": "widgets",
+  "icon": "format-chat",
+  "description": "Een lijst met reacties van bezoekers en recensenten.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "full"
+    ],
+    "alignWide": true
+  },
+  "textdomain": "reactions-block",
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}
