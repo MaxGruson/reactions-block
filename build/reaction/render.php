@@ -26,7 +26,7 @@ $link        = $attributes['link'] ?? '';
 			</blockquote>
 			<figcaption>
 				&mdash; <span><?php echo wp_kses_post( $author ); ?></span>, 
-				<cite><?php echo wp_kses_post( $publication ); ?></cite> <?php echo ( isset( $link['url'] ) ? '&#8599;' : '' ); ?>
+				<cite><?php echo wp_kses_post( $publication ); ?></cite><span class="link-arrow"><?php echo ( isset( $link['url'] ) ? '&#8599;' : '' ); ?></span>
 			</figcaption>
 		<?php if ( ! empty( $link ) ) { ?>
 		</a>
