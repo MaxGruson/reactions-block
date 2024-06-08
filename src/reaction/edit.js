@@ -51,8 +51,8 @@ export default function Edit({attributes, setAttributes}) {
 					<LinkControl
 						searchInputPlaceholder={__('Zoek of typ URL', 'reactions-block')}
 						value={ attributes.link }
-						onChange={ ( newLink ) => {
-							setAttributes( { link: {...newLink || ''} } ) }
+						onChange={ ( link ) => {
+							setAttributes( { link: link } ) }
 						}
 					>
 					</LinkControl>
@@ -76,8 +76,8 @@ export default function Edit({attributes, setAttributes}) {
                 'core/underline'
               ]}
             value={attributes.quote}
-            onChange={(quote) => setAttributes({quote})}
-            placeholder={__( 'Citaat...', 'cta-block')}
+            onChange={(quote) => setAttributes({quote: quote})}
+            placeholder={__( 'Citaat...', 'reactions-block')}
           />
         </blockquote>
 
@@ -87,14 +87,14 @@ export default function Edit({attributes, setAttributes}) {
             tagName='span'
             allowedFormats={[]}
             value={attributes.author}
-            onChange={(author) => setAttributes({author})}
+            onChange={(author) => setAttributes({author: author})}
             placeholder={__( 'Auteur (bijv. William Shakespeare)', 'reactions-block')}
           />,&nbsp;
           <RichText 
             tagName='cite'
             allowedFormats={[]}
             value={attributes.publication}
-            onChange={(publication) => setAttributes({publication})}
+            onChange={(publication) => setAttributes({publication: publication})}
             placeholder={__( 'Publicatie (bijv. Theaterkrant)', 'reactions-block')}
           />
         </figcaption>
