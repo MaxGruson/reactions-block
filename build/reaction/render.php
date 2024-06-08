@@ -17,11 +17,11 @@ $link        = $attributes['link'] ?? '';
 <li <?php echo get_block_wrapper_attributes( array( 'class' => 'reactions-block__reaction' ) ); ?>>
 	<figure>
 		<?php if ( ! empty( $link ) ) { ?>
-		<a target="<?php echo isset( $link['opensInNewTab'] ) ? '_blank' : '_self'; ?>" href="<?php echo esc_url( $link['url'] ); ?>">
+		<a target="_blank" href="<?php echo esc_url( $link['url'] ); ?>">
 		<?php } else { ?>
 		<div>
 		<?php } ?>
-			<blockquote cite="<?php echo esc_url( isset( $link['url'] ) ?? '' ); ?>">
+			<blockquote cite="<?php echo esc_url( $link['url'] ); ?>">
 				<p><?php echo wp_kses_post( $quote ); ?></p>
 			</blockquote>
 			<figcaption>
