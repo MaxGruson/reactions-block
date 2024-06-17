@@ -15,9 +15,9 @@ import {__experimentalLinkControl as LinkControl, useBlockProps, RichText, Block
 
 import { ToolbarGroup, ToolbarButton, Popover, Button } from '@wordpress/components';
 
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
-import { link } from '@wordpress/icons';
+import { link, linkOff } from '@wordpress/icons';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -27,33 +27,67 @@ import { link } from '@wordpress/icons';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({attributes, setAttributes}) {
+export default function Edit({attributes, setAttributes, isSelected}) {
 
-	const [ showLinkPopover, setShowLinkPopover ] = useState( false );
-	const toggleLinkPopover = () => {
-			setShowLinkPopover( ( state ) => ! state );
-	};
+	const [ isEditingURL, setIsEditingURL ] = useState( false );
+	const isURLSet = !! attributes.link;
+
+	const unlink = () => {
+		setAttributes( { link: undefined } );
+		setIsEditingURL( false );
+	}
+
+	const startEditing = ( event ) => {
+		event.preventDefault();
+		setIsEditingURL( true );
+	}
+
+	useEffect( () => {
+		if ( ! isSelected ) {
+			setIsEditingURL( false );
+		}
+	}, [ isSelected ] );
 
 	return (
 		<>
 		{/* Toolbar zone */}
 		<BlockControls>
 			<ToolbarGroup>
-				<ToolbarButton
-					icon={link}
-					label={__('Link', 'reactions-block')}
-					onClick={toggleLinkPopover}
-					isPressed={showLinkPopover}
-				/>
+				{ ! isURLSet && (
+					<ToolbarButton
+						name="link"
+						icon={ link }
+						title={ __( 'Link' ) }
+						onClick={ startEditing }
+					/>
+				) }
+				{ isURLSet && (
+					<ToolbarButton
+						name="link"
+						icon={ linkOff }
+						title={ __( 'Unlink' ) }
+						onClick={ unlink }
+						isActive
+					/>
+				) }
 			</ToolbarGroup>
-			{showLinkPopover && (
-				<Popover>
+			{ isSelected && ( isEditingURL || isURLSet ) && (
+				<Popover
+					onClose={ () => {
+						setIsEditingURL( false );
+					} }
+					placement="top"
+				>
 					<LinkControl
 						searchInputPlaceholder={__('Zoek of typ URL', 'reactions-block')}
 						value={ attributes.link }
-						onChange={ ( link ) => {
-							setAttributes( { link: link } ) }
-						}
+						onChange={ ( newLink ) => {
+							setAttributes( { link: {...newLink} } )
+						} }
+						onRemove={ () => {
+							unlink();
+						} }
+						forceIsEditingLink={ isEditingURL }
 					>
 					</LinkControl>
 				</Popover>
@@ -62,44 +96,44 @@ export default function Edit({attributes, setAttributes}) {
 		{/* End Toolbar zone */}
 
 		{/* Main block zone */}
-    <li className='reactions__reaction'>
-      <figure { ...useBlockProps() }>
-        <blockquote cite={attributes.link}>
-          <RichText 
-            tagName='p'
-            allowedFormats={[
-                'core/italic',
-                'core/bold',
-                'core/strikethrough',
-                'core/subscript',
-                'core/superscript',
-                'core/underline'
-              ]}
-            value={attributes.quote}
-            onChange={(quote) => setAttributes({quote: quote})}
-            placeholder={__( 'Citaat...', 'reactions-block')}
-          />
-        </blockquote>
+		<li className='reactions__reaction'>
+			<figure { ...useBlockProps() }>
+				<blockquote cite={attributes.link}>
+					<RichText 
+						tagName='p'
+						allowedFormats={[
+								'core/italic',
+								'core/bold',
+								'core/strikethrough',
+								'core/subscript',
+								'core/superscript',
+								'core/underline'
+							]}
+						value={attributes.quote}
+						onChange={(quote) => setAttributes({quote: quote})}
+						placeholder={__( 'Citaat...', 'reactions-block')}
+					/>
+				</blockquote>
 
-        <figcaption>
-          &mdash;&nbsp;
-          <RichText 
-            tagName='span'
-            allowedFormats={[]}
-            value={attributes.author}
-            onChange={(author) => setAttributes({author: author})}
-            placeholder={__( 'Auteur (bijv. William Shakespeare)', 'reactions-block')}
-          />,&nbsp;
-          <RichText 
-            tagName='cite'
-            allowedFormats={[]}
-            value={attributes.publication}
-            onChange={(publication) => setAttributes({publication: publication})}
-            placeholder={__( 'Publicatie (bijv. Theaterkrant)', 'reactions-block')}
-          />
-        </figcaption>
-      </figure>
-    </li>
+				<figcaption>
+					&mdash;&nbsp;
+					<RichText 
+						tagName='span'
+						allowedFormats={[]}
+						value={attributes.author}
+						onChange={(author) => setAttributes({author: author})}
+						placeholder={__( 'Auteur (bijv. William Shakespeare)', 'reactions-block')}
+					/>,&nbsp;
+					<RichText 
+						tagName='cite'
+						allowedFormats={[]}
+						value={attributes.publication}
+						onChange={(publication) => setAttributes({publication: publication})}
+						placeholder={__( 'Publicatie (bijv. Theaterkrant)', 'reactions-block')}
+					/>
+				</figcaption>
+			</figure>
+		</li>
 		{/* End Main block zone */}
 		</>
 	);
