@@ -30,10 +30,18 @@ $reaction_link = $attributes['link'] ?? '';
 			">
 				<p><?php echo wp_kses_post( $quote ); ?></p>
 			</blockquote>
+			<?php if ( ! empty ( $author ) || ! empty ( $publication ) ) { ?>
 			<figcaption>
-				&mdash; <span><?php echo wp_kses_post( $author ); ?></span>, 
-				<cite><?php echo wp_kses_post( $publication ); ?></cite><span class="link-arrow"><?php echo ( isset( $link['url'] ) ? '&#8599;' : '' ); ?></span>
+				<?php if ( ! empty ( $author ) ) { ?>
+					&mdash; <span><?php echo wp_kses_post( $author ); ?></span>
+				<?php } ?>
+				<?php if ( ! empty ( $author ) && ! empty ( $publication ) ) { ?>,
+					<?php if ( ! empty ( $publication ) ) { ?>
+						<cite><?php echo wp_kses_post( $publication ); ?></cite><?php if ( isset( $reaction_link['url'] ) ) { ?><span class="link-arrow">&#8599;</span><?php } ?>
+						<?php } ?>
+					<?php } ?>
 			</figcaption>
+			<?php } ?>
 		<?php if ( ! empty( $reaction_link ) ) { ?>
 		</a>
 		<?php } else { ?>
